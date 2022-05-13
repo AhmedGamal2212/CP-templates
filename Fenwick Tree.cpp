@@ -1,13 +1,14 @@
+template<typename T>
 struct fenwick_tree{
     int n;
-    vector<int> bit;
+    vector<T> bit;
 
     fenwick_tree(int n){
         this -> n = n;
         bit.assign(n + 1, 0);
     }
 
-    fenwick_tree(vector<int>& v) : fenwick_tree(int(v.size())){
+    fenwick_tree(vector<T>& v) : fenwick_tree(int(v.size())){
         int idx = 0;
         while(idx < n){
             add(idx + 1, v[idx]);
@@ -22,8 +23,8 @@ struct fenwick_tree{
         }
     }
 
-    int sum(int idx){
-        int ret = 0;
+    T sum(int idx){
+        T ret = 0;
         while(idx){
             ret += bit[idx];
             idx ^= idx & -idx;
@@ -31,7 +32,15 @@ struct fenwick_tree{
         return ret;
     }
 
-    int sum(int l, int r){
+    T sum(int l, int r){
+        if(l > r)
+            return 0;
+
         return sum(r) - sum(l - 1);
+    }
+
+    void update_range(int l, int r, int value){
+        add(l, value);
+        add(r + 1, -value);
     }
 };
