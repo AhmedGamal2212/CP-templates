@@ -47,4 +47,22 @@ struct Math{
         return ret;
     }
 
+
+    ll comb(ll n, ll r){
+        ll ans = 1, k = 1;
+
+        updmin(r, n - r);
+
+        if(r){
+            while(r){
+                ans *= n, k *= r;
+                ll g = gcd(ans, k);
+                ans /= g, k /= g;
+                n--, r--;
+            }
+        }else{
+            ans = 1;
+        }
+        return ans;
+    }
 };
