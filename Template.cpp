@@ -28,7 +28,7 @@ using namespace __gnu_pbds;
 #define clzll __builtin_clzll
 #define ctz __builtin_ctz
 #define ctzll __builtin_ctzll
-#define modulo(a, b, mod) ((((a) % (mod)) * ((b) % (mod))) % (mod))
+#define modulo(a, b, mod) ((((a) % (mod)) + ((b) % (mod))) % (mod))
 #define cnte(v, x) count(all(v), (x))
 #define mine(v) min_element(all(v))
 #define maxe(v) max_element(all(v))
@@ -38,7 +38,7 @@ using namespace __gnu_pbds;
 #define getmod(x, m) ((x) % (m) + (m)) % (m)
 #define debug(x) cout << "x: " << (x) << nl;
 #define debug2(x, y) cout << "x: " << (x) << " y: " << y << nl;
-#define ordered_set tree<pair<int, int>, null_type, less<>, rb_tree_tag, tree_order_statistics_node_update>
+#define ordered_set tree<int, null_type, less<>, rb_tree_tag, tree_order_statistics_node_update>
 #define ordered_map tree<int, int, less<>, rb_tree_tag, tree_order_statistics_node_update>
 
 //vector<int> dx = {0, 0, 1, -1, 1, 1, -1, -1}, dy = {1, -1, 0, 0, 1, -1, 1, -1};
@@ -78,11 +78,19 @@ void Start_Crushing() {
 }
 
 void solve(){
+    
+}
 
+void set_file(string& s){
+    freopen((s + ".in").c_str(), "r", stdin);
+    freopen((s + ".out").c_str(), "w", stdout);
 }
 
 int main(){
     Start_Crushing();
+
+//    string file_name = "";
+//    set_file(file_name);
 
     int t = 1;
 //    /*Multiple test cases?*/ cin >> t;
