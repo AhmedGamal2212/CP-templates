@@ -84,11 +84,11 @@ struct fenwick_tree{
 
     explicit fenwick_tree(int n){
         this -> n = n;
-        bit.assign(10005, 0);
+        bit.assign(n + 5, 0);
     }
 
     void add(int idx, int value){
-        while(idx <= 10000){
+        while(idx <= n){
             updmax(bit[idx], value);
             idx += idx & -idx;
         }
