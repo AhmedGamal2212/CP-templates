@@ -1,30 +1,38 @@
 struct segment_tree {
     struct node {
-        int value, cnt;
+        ll seg, pref, suf, sum;
 
         node(){
-            value = cnt = 0;
+            seg = pref = suf = sum = 0;
         }
 
-        node(int value, int cnt){
-            this -> value = value;
-            this -> cnt = cnt;
+        node(ll seg, ll pref, ll suf, ll sum){
+            this -> seg = seg;
+            this -> pref = pref;
+            this -> suf = suf;
+            this -> sum = sum;
         }
     };
 
     int size;
     vector<node> tree;
-    const node DEFAULT = {imax, 0};
+    const node DEFAULT = {0, 0, 0, 0};
 
 
+    node single(int value){
+        if(value > 0){
+            return {value, value, value, value};
+        }
+        return {0, 0, 0, value};
+    }
 
     node merge(node& a, node& b){
-        if(a.value < b.value)
-            return a;
-        if(a.value > b.value)
-            return b;
-
-        return {a.value, a.cnt + b.cnt};
+        return {
+            max({a.seg, b.seg, a.suf + b.pref}),
+            max(a.pref, a.sum + b.pref),
+            max(b.suf, b.sum + a.suf),
+            a.sum + b.sum
+        };
     }
 
     segment_tree(){
@@ -48,7 +56,7 @@ struct segment_tree {
     void build(vector<int>& v, int idx, int l, int r){
         if(r - l == 1){
             if(l < int(v.size()))
-                tree[idx] = {v[l], 1};
+                tree[idx] = single(v[l]);
             return;
         }
 
@@ -64,7 +72,7 @@ struct segment_tree {
 
     void set(int target, int value, int idx, int l, int r){
         if(r - l == 1)
-            return void(tree[idx] = {value, 1});
+            return void(tree[idx] = single(value));
 
         int mid = l - (l - r) / 2;
         if(target < mid){
