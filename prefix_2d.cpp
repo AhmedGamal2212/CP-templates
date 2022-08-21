@@ -1,4 +1,4 @@
-voud prefix_2d(){
+void prefix_2d(){
     vector<vector<int>> v;
     int n, m; // Row and Col
 
