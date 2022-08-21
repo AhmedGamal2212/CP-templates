@@ -220,6 +220,9 @@ template < typename T = int > struct Power_Inverse {
 - Rule: A number is divisible by 9 if the sum of the digits are evenly divisible by 9.
 - Rule: A number passes the test for 11 if the difference of the sums of alternating digits is divisible by 11.(This abstract and confusing sounding rule is much clearer with a few examples).
 
+Arithemetic progression : 
+xn = a + d(n−1)
+
 
 
 */
