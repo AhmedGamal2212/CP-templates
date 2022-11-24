@@ -18,45 +18,63 @@ struct binary_heap {
         }
     }
 
-    void add(int x){
+    int add(int x){
         n++;
         v.emplace_back(x);
-        shift_up(n);
+        return shift_up(n);
     }
 
-    int get_min(){
+    int get_max(){
         return v[1];
     }
 
-    int extract_min(){
+    pair<int, int> extract_max(){
         int x = v[1];
         v[1] = v[n];
         n--;
-        shift_down(1);
-        return x;
+        v.pop_back();
+        return {shift_down(1) * (n > 0), x};
     }
 
-    void shift_up(int pos){
-        while(pos > 1 and v[pos / 2] > v[pos]){
-            swap(v[pos], v[pos / 2]);
+    int shift_up(int pos){
+        while(pos > 1 and v[pos >> 1] < v[pos]){
+            swap(v[pos], v[pos >> 1]);
             pos >>= 1;
         }
+        return pos;
     }
 
-    void shift_down(int pos){
+    int shift_down(int pos){
         while(pos * 2 <= n){
             int child = pos * 2;
-            if(pos * 2 + 1 <= n and v[pos * 2 + 1] < v[child]){
+            if(pos * 2 + 1 <= n and v[pos * 2 + 1] > v[child]){
                 child = pos * 2 + 1;
             }
-            if(v[pos] <= v[child])
+            if(v[pos] >= v[child])
                 break;
             swap(v[pos], v[child]);
             pos = child;
         }
+        return pos;
+    }
+
+    int remove_pos(int pos){
+        int x = v[pos];
+        v[pos] = v[n];
+        n--;
+        v.pop_back();
+        if(x > v[pos])
+            shift_down(pos);
+        else
+            shift_up(pos);
+        return x;
     }
 
     bool empty() {
         return not n;
+    }
+
+    int size(){
+        return n;
     }
 };
