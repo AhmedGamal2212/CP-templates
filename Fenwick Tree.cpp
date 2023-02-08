@@ -3,9 +3,15 @@ struct fenwick_tree{
     int n{};
     vector<T> bit;
 
+    fenwick_tree() = default;
+
+    void init(int n_){
+        this -> n = n_;
+        bit.assign(n_ + 1, 0);
+    }
+
     explicit fenwick_tree(int n){
-        this -> n = n;
-        bit.assign(n + 1, 0);
+        init(n);
     }
 
     explicit fenwick_tree(vector<T>& v) : fenwick_tree(int(v.size())){
@@ -32,10 +38,9 @@ struct fenwick_tree{
         return ret;
     }
 
-    T sum(int l, int r){
+    ll sum(int l, int r){
         if(l > r)
             return 0;
-
         return sum(r) - sum(l - 1);
     }
 
