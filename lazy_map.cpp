@@ -1,11 +1,11 @@
 struct lazy_freq {
-    int n, timer;
+    int n, timer, sf = int(5e4);
     vector<int> freq, time;
 
-    lazy_freq(int n) {
+    explicit lazy_freq(int n) {
         this -> n = n;
         timer = 0;
-        freq.assign(n + 5, 0);
+        time = freq = vector<int>(n + sf + 5, 0);
     }
 
     void clear(){
@@ -13,15 +13,15 @@ struct lazy_freq {
     }
 
     bool has_key(int key){
-        return time[key] == timer;
+        return time[key + sf] == timer;
     }
 
     void set(int key, int value){
-        time[key] = timer;
-        freq[key] = value;
+        time[key + sf] = timer;
+        freq[key + sf] = value;
     }
 
     int get(int key){
-        return freq[key];
+        return freq[key + sf];
     }
 };
