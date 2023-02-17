@@ -59,4 +59,11 @@ template<typename T = ll> struct MODINV {
             mul(res, i);
         return res;
     }
+
+    T nPr(T n_, T r){
+        T res = 1;
+        for(auto& i : {fact[n_], inv[n_ - r]})
+            mul(res, i);
+        return res;
+    }
 };
