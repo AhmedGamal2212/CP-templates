@@ -54,10 +54,7 @@ template<typename T = ll> struct MODINV {
     }
  
     T nCr(T n_, T r){
-        T res = 1;
-        for(auto& i : {fact[n_], inv[r], inv[n_ - r]})
-            mul(res, i);
-        return res;
+        return modulo(nPr(n_, r), inv[r], mod);
     }
 
     T nPr(T n_, T r){
