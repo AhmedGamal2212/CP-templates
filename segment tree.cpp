@@ -1,107 +1,78 @@
+template<typename T = ll>
 struct segment_tree {
-    struct node {
-        ll seg, pref, suf, sum;
-
-        node(){
-            seg = pref = suf = sum = 0;
-        }
-
-        node(ll seg, ll pref, ll suf, ll sum){
-            this -> seg = seg;
-            this -> pref = pref;
-            this -> suf = suf;
-            this -> sum = sum;
-        }
-    };
-
     int size;
-    vector<node> tree;
-    const node DEFAULT = {0, 0, 0, 0};
+    vector<T> sums;
+    const T DEFAULT = 0;
 
-
-    node single(int value){
-        if(value > 0){
-            return {value, value, value, value};
-        }
-        return {0, 0, 0, value};
+    T merge(T a, T b) {
+        return a + b;
     }
 
-    node merge(node& a, node& b){
-        return {
-            max({a.seg, b.seg, a.suf + b.pref}),
-            max(a.pref, a.sum + b.pref),
-            max(b.suf, b.sum + a.suf),
-            a.sum + b.sum
-        };
+    T single(int x){
+        return log10(x);
+    }
+    
+    explicit segment_tree(int n) {
+        size = 0;
+        init(n);
     }
 
-    segment_tree(){
+    void init(int n) {
         size = 1;
-    }
-
-    explicit segment_tree(vector<int>& v){
-        size = 1;
-        init((int)v.size());
-        build(v);
-    }
-
-    void init(int n){
-        size = 1;
-        while(size < n)
+        while (size < n)
             size *= 2;
-
-        tree.assign(size * 2, node());
+        sums.assign(size * 2, DEFAULT);
     }
 
-    void build(vector<int>& v, int idx, int l, int r){
-        if(r - l == 1){
-            if(l < int(v.size()))
-                tree[idx] = single(v[l]);
+    void build(vector<int> &v, int x, int lx, int rx) {
+        if (rx - lx == 1) {
+            if (lx < int(v.size()))
+                sums[x] = single(v[lx]);
             return;
         }
 
-        int mid = l - (l - r) / 2;
-        build(v, 2 * idx + 1, l, mid);
-        build(v, 2 * idx + 2, mid, r);
-        tree[idx] = merge(tree[2 * idx + 1], tree[2 * idx + 2]);
+        int mid = lx - (lx - rx) / 2;
+        build(v, 2 * x + 1, lx, mid);
+        build(v, 2 * x + 2, mid, rx);
+        sums[x] = merge(sums[2 * x + 1], sums[2 * x + 2]);
     }
 
-    void build(vector<int>& v){
+    void build(vector<int> &v) {
         build(v, 0, 0, size);
     }
 
-    void set(int target, int value, int idx, int l, int r){
-        if(r - l == 1)
-            return void(tree[idx] = single(value));
+    void set(int i, int v, int x, int lx, int rx) {
+        if (rx - lx == 1)
+            return void(sums[x] = single(v));
 
-        int mid = l - (l - r) / 2;
-        if(target < mid){
-            set(target, value, 2 * idx + 1, l, mid);
-        }else{
-            set(target, value, 2 * idx + 2, mid, r);
+        int mid = lx - (lx - rx) / 2;
+        if (i < mid) {
+            set(i, v, 2 * x + 1, lx, mid);
+        } else {
+            set(i, v, 2 * x + 2, mid, rx);
         }
 
-        tree[idx] = merge(tree[2 * idx + 1], tree[2 * idx + 2]);
+        sums[x] = merge(sums[2 * x + 1], sums[2 * x + 2]);
     }
 
-    void set(int target, int value){
-        set(target, value, 0, 0, size);
+    void set(int i, int v) {
+        set(i, v, 0, 0, size);
     }
 
-    node query(int st, int ed, int x, int l, int r){
-        if(l >= ed or r <= st)
+    T query(int l, int r, int x, int lx, int rx) {
+        if (lx >= r or rx <= l)
             return DEFAULT;
-        if(l >= st and r <= ed)
-            return tree[x];
+        if (lx >= l and rx <= r)
+            return sums[x];
 
-        int mid = l - (l - r) / 2;
-        node left = query(st, ed, 2 * x + 1, l, mid);
-        node right = query(st, ed, 2 * x + 2, mid, r);
+        int mid = lx - (lx - rx) / 2;
+        T left = query(l, r, 2 * x + 1, lx, mid);
+        T right = query(l, r, 2 * x + 2, mid, rx);
 
         return merge(left, right);
     }
 
-    node query(int st, int ed){
-        return query(st, ed, 0, 0, size);
+    T query(int l, int r) {
+        return query(l, r, 0, 0, size);
     }
 };
