@@ -1,8 +1,7 @@
-struct Math{
-    template<typename T>
-    static ll BinExp(T b, T e, int mod){
+struct Math {
+    template<typename T> static ll bin_exp(T b, T e, int mod) {
         ll res = 1;
-        while(e){
+        while(e) {
             if(e & 1)
                 res = modulo(res, b, mod);
  
@@ -12,28 +11,25 @@ struct Math{
         return res;
     }
  
-    template<typename T, typename E>
-    static void sub(T& a, E b, int mod){
+    template<typename T, typename E> static void sub(T& a, E b, int mod) {
         a -= b;
         if(a < 0)
             a += mod;
     }
  
-    template<typename T, typename E>
-    static void add(T& a, E b, int mod){
+    template<typename T, typename E> static void add(T& a, E b, int mod) {
         a += b;
         if(a >= mod)
             a -= mod;
     }
  
-    template<typename T>
-    static T inv(T x, T mod){
+    template<typename T> static T inv(T x, T mod) {
         x %= mod;
         if(x < 0)
             x += mod;
  
         T b = mod, ret = 0, c = 1;
-        while(x){
+        while(x) {
             int tmp = b / x;
  
             b -= tmp * x;
@@ -47,10 +43,9 @@ struct Math{
         return ret;
     }
  
-    template<typename T>
-    static void mul(T& a, T b, T mod){
+    template<typename T> static void mul(T& a, T b, T mod) {
         ll res = 0;
-        while(b){
+        while(b) {
             if(b & 1) {
                 add(res, a, mod);
             }
@@ -58,5 +53,13 @@ struct Math{
             b >>= 1;
         }
         a = res;
+    }
+ 
+    template<typename T> static ll mul(vector<T> v, T mod){
+        ll res = 1;
+        for(auto& i : v){
+            mul(res, i, mod);
+        }
+        return res;
     }
 };
