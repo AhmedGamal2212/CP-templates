@@ -1,26 +1,31 @@
 template<typename T = ll> struct segment_tree {
 
     struct node {
-        int value, cnt;
+        ll sum {}, pref {}, suf {}, mx {};
 
-        node(): value(0), cnt(0) {
+        node() {
+            sum = pref = suf = mx = 0;
         };
 
-        node(int value): value(value), cnt(1) {
-        };
-
-        node(int value, int cnt): value(value), cnt(cnt) {
-        };
+        node(ll sum, ll pref, ll suf, ll mx) {
+            this->sum = sum;
+            this->pref = pref;
+            this->suf = suf;
+            this->mx = mx;
+        }
     };
 
 
     // 0-based
     int size;
     vector<node> tree;
-    const node DEFAULT = node(imax);
+    const node DEFAULT = node();
 
     node single(int value) {
-        return {value};
+        if(value > 0) {
+            return {value, value, value, value};
+        }
+        return {value, 0, 0, 0};
     }
 
     segment_tree() {
@@ -39,12 +44,14 @@ template<typename T = ll> struct segment_tree {
     }
 
     node merge(node& a, node& b) {
-        if(a.value < b.value) {
-            return a;
-        } else if(a.value > b.value) {
-            return b;
-        }
-        return {a.value, a.cnt + b.cnt};
+        auto ret = node();
+
+        ret.sum = a.sum + b.sum;
+        ret.pref = max(a.pref, a.sum + b.pref);
+        ret.suf = max(b.suf, b.sum + a.suf);
+        ret.mx = max({a.suf + b.pref, a.mx, b.mx});
+
+        return ret;
     }
 
     void init(int n) {
@@ -77,7 +84,7 @@ template<typename T = ll> struct segment_tree {
     // note that the segment is [lx, rx)
     void set(int i, int value, int x, int lx, int rx) {
         if(rx - lx == 1) {
-            tree[x] = value;
+            tree[x] = single(value);
             return;
         }
 
