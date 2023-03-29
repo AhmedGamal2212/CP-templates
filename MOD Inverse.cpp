@@ -57,6 +57,10 @@ template<typename T = ll> struct MODINV {
     }
 
     T nCr(T n_, T r) {
+        if(n_ < r or r < 0) {
+            return 0;
+        }
+
         return modulo(nPr(n_, r), inv[r], mod);
     }
 
