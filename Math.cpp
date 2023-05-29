@@ -54,4 +54,18 @@ namespace Math {
         }
         a = res;
     }
+
+    static ll nCr(int n, int k) {
+        if (k > n) {
+            return 0;
+        }
+
+        ll num_ways = 1;
+        for (int i = 0; i < k; i++) {
+            num_ways *= (n - i);
+            num_ways /= (i + 1);
+        }
+
+        return num_ways;
+    }
 };
