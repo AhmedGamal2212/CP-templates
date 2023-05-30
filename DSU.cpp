@@ -1,15 +1,15 @@
 
-struct dsu{
+struct dsu {
     vector<int> p, rank;
 
-    explicit dsu(int size){
+    explicit dsu(int size) {
         p.resize(size + 1);
         rank.resize(size + 1);
 
         iota(all(p), 0);
     }
 
-    int get(int x){
+    int get(int x) {
         return p[x] = x == p[x] ? x : get(p[x]);
     }
 
@@ -19,12 +19,10 @@ struct dsu{
         if(u == v)
             return;
 
-        if(rank[u] == rank[v])
-            rank[u]++;
-
-        if(rank[u] > rank[v])
-            p[v] = u;
-        else
-            p[u] = v;
+        rank[u] += rank[v] == rank[u];
+        if(rank[v] > rank[u])
+            swap(u, v);
+        
+        p[v] = u;
     }
 };
