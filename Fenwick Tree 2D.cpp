@@ -41,4 +41,12 @@ template<typename T = int, typename E = int> struct fenwick_tree_2d {
             x += x & -x;
         }
     }
+
+    T sum(int x1, int y1, int x2, int y2) {
+        ll ret = sum(x2, y2);
+        ret -= sum(x2, y1 - 1);
+        ret -= sum(x1 - 1, y2);
+        ret += sum(x1 - 1, y1 - 1);
+        return ret;
+    }
 };
