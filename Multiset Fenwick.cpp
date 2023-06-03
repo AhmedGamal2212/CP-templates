@@ -1,16 +1,16 @@
 template<typename T = ll> struct FenwickTree {
-    int M;
+    int m;
     vector<T> BIT;
     const T DEFAULT = 0;
 
     explicit FenwickTree(int size) {
-        M = 1 << (__lg(size) + !!(size & (size - 1)));
-        BIT.assign(M, DEFAULT);
+        m = 1 << (__lg(size) + !!(size & (size - 1)));
+        BIT.assign(m, DEFAULT);
     }
 
     // 1-based
     void add(int pos, T val) {
-        for(++pos; pos <= M; pos += pos & -pos) {
+        for(++pos; pos <= m; pos += pos & -pos) {
             BIT[pos - 1] += val;
         }
     }
@@ -22,10 +22,14 @@ template<typename T = ll> struct FenwickTree {
         }
         return ret;
     }
+    
+    T get(int l, int r) {
+        return get(r) - get(l - 1);
+    }
 
     int bs(T val) {
         int s = 0;
-        for(int sz = M >> 1; sz; sz >>= 1) {
+        for(int sz = m >> 1; sz; sz >>= 1) {
             if(BIT[s + sz - 1] < val) {
                 val -= BIT[(s += sz) - 1];
             }
@@ -34,7 +38,7 @@ template<typename T = ll> struct FenwickTree {
     }
 
     void init_multiset() {
-        BIT.assign(M, 0);
+        BIT.assign(m, 0);
         add(0, -1);
     }
 
@@ -59,7 +63,7 @@ template<typename T = ll> struct FenwickTree {
     }
 
     int size() {
-        return get(M - 1) + 1;
+        return get(m - 1) + 1;
     }
 
     bool empty() {
