@@ -3,7 +3,7 @@ struct DSUWithSets {
     vector<int> group_size, par, roots, tail, nxt, pos;
 
     explicit DSUWithSets(int size) {
-        par.assign(size - 1, -1);
+        par.assign(size, -1);
         group_size = vector<int>(size, 1);
         roots = pos = tail = vector<int>(size);
         nxt.assign(size, -1);
